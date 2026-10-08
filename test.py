@@ -1,30 +1,33 @@
 class Student:
     def __init__(self, student_id, name):
+        if not str(student_id).strip() or not isinstance(name, str) or not name.strip():
+            raise ValueError("El ID y el nombre no pueden estar vacíos.")
+
         self.student_id = student_id
         self.name = name
-        self.gradez = []
-        self.is_passed = "NO"
+        self.grades = []
+        self.is_passed = False
         self.honor = False
 
-    def add_grades(self, grade):
+    def add_grade(self, grade):
         if isinstance(grade, bool) or not isinstance(grade, (int, float)):
             print("Error: la nota debe ser un número.")
             return
         if not 0 <= grade <= 100:
             print("Error: la nota debe estar entre 0 y 100.")
             return
-        self.gradez.append(grade)
+        self.grades.append(grade)
 
-    def calc_average(self):
-        t = 0
-        for x in self.gradez:
-            t += x
-        avg = t / len(self.gradez) if self.gradez else 0
-        return avg
+    def calculate_average(self):
+        total = 0
+        for grade in self.grades:
+            total += grade
+        average = total / len(self.grades) if self.grades else 0
+        return average
 
     def check_honor(self):
-        if self.calc_average() > 90:
-            self.honor = True
+        self.honor = self.calculate_average() >= 90
+        return self.honor
 
     def letter_grade(self):
         average = self.calculate_average()
@@ -36,14 +39,35 @@ class Student:
             return "C"
         if average >= 60:
             return "D"
+        return "F"
+
+    def remove_grade(self, index=None, value=None):
+        if (index is None) == (value is None):
+            print("Error: indique un índice o un valor.")
+            return
+
+        if index is not None:
+            if isinstance(index, bool) or not isinstance(index, int):
+                print("Error: el índice debe ser un entero.")
+                return
+            if index < 0 or index >= len(self.grades):
+                print("Error: índice fuera de rango.")
+                return
+            del self.grades[index]
         else:
-            return "F"
+            if value not in self.grades:
+                print("Error: la nota no existe.")
+                return
+            self.grades.remove(value)
 
-    
-    def delete_grade(self, index):
-        del self.gradez[index]
+    def pass_status(self):
+        self.is_passed = self.calculate_average() >= 60
+        if self.is_passed:
+            return "Passed"
+        return "Failed"
 
-    def report(self):  # broken format
+    def report(self):
+        print("\n--- Student Report ---")
         print("Student ID:", self.student_id)
         print("Student Name:", self.name)
         print("Number of Grades:", len(self.grades))
@@ -53,24 +77,7 @@ class Student:
         print("Honor Roll:", self.check_honor())
 
 
-    def pass_status(self):
-        if self.calculate_average() >= 60:
-            return "Passed"
-        return "Failed"
-
-def startrun():
-    a = Student("x", "")
-    a.add_grades(100)
-    a.add_grades("Fifty")  # broken
-    a.calc_average()
-    a.check_honor()
-    a.delete_grade(5)  # IndexError
-    a.report()
-
-
-
 def main():
-    """Ejecuta ejemplos del sistema."""
     try:
         student = Student("001", "Ana")
         student.add_grade(95)
@@ -79,6 +86,9 @@ def main():
         student.report()
 
         student.remove_grade(value=90)
+        student.report()
+
+        student.remove_grade(index=0)
         student.report()
 
         student.add_grade("Fifty")
