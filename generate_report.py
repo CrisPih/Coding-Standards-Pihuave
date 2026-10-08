@@ -6,8 +6,11 @@ from collections import Counter
 from html import escape
 from pathlib import Path
 
-input_file = Path("pylint_initial.json")
-output_file = Path("pylint_initial.html")
+# input_file = Path("pylint_initial.json")
+# output_file = Path("pylint_initial.html")
+
+input_file = Path("pylint_final.json")
+output_file = Path("pylint_final.html")
 
 with input_file.open(encoding="utf-16") as file:
     issues = json.load(file)

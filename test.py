@@ -1,5 +1,13 @@
+
+# Reviewed under SE2 coding standards guidelines
+"""Student grade management system."""
+
+
 class Student:
+    """Represents a student and their grades."""
+
     def __init__(self, student_id, name):
+        """Initializes the student information."""
         if not str(student_id).strip() or not isinstance(name, str) or not name.strip():
             raise ValueError("El ID y el nombre no pueden estar vacíos.")
 
@@ -10,6 +18,7 @@ class Student:
         self.honor = False
 
     def add_grade(self, grade):
+        """Adds a valid grade."""
         if isinstance(grade, bool) or not isinstance(grade, (int, float)):
             print("Error: la nota debe ser un número.")
             return
@@ -19,6 +28,7 @@ class Student:
         self.grades.append(grade)
 
     def calculate_average(self):
+        """Calculates the average grade."""
         total = 0
         for grade in self.grades:
             total += grade
@@ -26,10 +36,12 @@ class Student:
         return average
 
     def check_honor(self):
+        """Checks if the student qualifies for the honor roll."""
         self.honor = self.calculate_average() >= 90
         return self.honor
 
     def letter_grade(self):
+        """Returns the letter grade based on the average."""
         average = self.calculate_average()
         if average >= 90:
             return "A"
@@ -42,6 +54,7 @@ class Student:
         return "F"
 
     def remove_grade(self, index=None, value=None):
+        """Removes a grade by index or value."""
         if (index is None) == (value is None):
             print("Error: indique un índice o un valor.")
             return
@@ -61,12 +74,14 @@ class Student:
             self.grades.remove(value)
 
     def pass_status(self):
+        """Checks whether the student passed or failed."""
         self.is_passed = self.calculate_average() >= 60
         if self.is_passed:
             return "Passed"
         return "Failed"
 
     def report(self):
+        """Displays the student's grade report."""
         print("\n--- Student Report ---")
         print("Student ID:", self.student_id)
         print("Student Name:", self.name)
@@ -78,6 +93,7 @@ class Student:
 
 
 def main():
+    """Runs examples of the student grading system."""
     try:
         student = Student("001", "Ana")
         student.add_grade(95)
